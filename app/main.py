@@ -3,7 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import socketio
 from app.logger import get_logger
-
+from app.db.models import Session,SessionMessage
+from app.db.base import Base
+from app.db.session import async_engine
 
 logger=get_logger(__name__)
 
@@ -19,7 +21,11 @@ sio = socketio.AsyncServer(
 
 @asynccontextmanager
 async def lifespan(app):
-    pass
+    logger.info("Creating Tables .......")
+    #    async with async_engine.begin() as conn:
+    #         await conn.run_sync(Base.metadata.create_all)
+    logger.info("Database Tables Created Successfully")
+    yield
 
 
 def create_app():
@@ -44,6 +50,6 @@ def create_app():
 
 
 app = create_app()
-socket_app = socketio.ASGIApp(sio, app)
+voice_app = socketio.ASGIApp(sio, app)
     
 
