@@ -11,6 +11,5 @@ root_logger.setLevel(LOG_LEVEL)
 if not root_logger.hasHandlers():
     root_logger.addHandler(handler)
 
-def get_logger(name: str = None) -> logging.Logger:
-    """Get a logger with the given name, or the root logger if no name is provided."""
+def get_logger(name: str = None):
     return logging.getLogger(name)

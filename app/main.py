@@ -45,6 +45,29 @@ def create_app():
     @app.get("/ping")
     async def ping():
         return {"status" : "pong"}
+    
+    # just for debugging
+    @sio.event
+    async def connect(sid,environ):
+        try:
+            ip = environ.get("REMOTE_ADDR")
+            logger.info(f"Client Connected Succesfully with ID : {sid} and IP : {ip}")
+            await sio.emit('message', {
+                'message': 'Connected to server',
+                'sid': sid
+            },to=sid)
+            
+        except Exception as e:
+           logger.error(f"Connect event error: {e}")
+
+    @sio.event
+    async def disconnect(sid):
+        try:
+            logger.info(f"Client disconnected: {sid}")
+
+        except Exception as e:
+            logger.error(f"Error in disconnect event: {e}")
+
     return app
 
 
